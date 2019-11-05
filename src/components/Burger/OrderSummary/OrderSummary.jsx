@@ -24,7 +24,7 @@ function OrderSummary(props) {
             <h4>Total price: {props.price.toFixed(2)}</h4>
             <p>Continue to checkout?</p>
             <Button btnType='Danger' clicked={props.cancelClicked}>Cancel</Button>
-            <Button btnType='Success' clicked={props.continueClicked}>Cancel</Button>
+            <Button btnType='Success' clicked={props.continueClicked}>Continue</Button>
         </Aux>
     );
 }

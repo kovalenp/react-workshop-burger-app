@@ -3,8 +3,7 @@ import styles from './Modal.css';
 import Aux from '../../hoc/Auxiliry';
 import Backdrop from '../Backdrop/Backdrop';
 
-function Modal(props) {
-    return (
+const Modal = (props) => (
         <Aux>
         <Backdrop show={props.show} close={props.close}/>
         <div 
@@ -18,6 +17,5 @@ function Modal(props) {
         </div>
         </Aux>
     );
-}
 
 export default Modal;
