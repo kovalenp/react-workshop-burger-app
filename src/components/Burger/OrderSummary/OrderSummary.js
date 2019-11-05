@@ -1,5 +1,6 @@
 import React from 'react';
 import Aux from '../../hoc/Auxiliry';
+import Button from '../../UI/Button/Button';
 
 function OrderSummary(props) {
     
@@ -22,6 +23,8 @@ function OrderSummary(props) {
             </ul>
             <h4>Total price: {props.price.toFixed(2)}</h4>
             <p>Continue to checkout?</p>
+            <Button btnType='Danger' clicked={props.cancelClicked}>Cancel</Button>
+            <Button btnType='Success' clicked={props.continueClicked}>Cancel</Button>
         </Aux>
     );
 }

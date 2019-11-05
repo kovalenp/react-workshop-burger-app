@@ -37,6 +37,10 @@ class BurgerBuilder extends Component {
         this.setState({isOrdering: false});
     }
 
+    processOrderHandler = () => {
+        alert(`I'm calling a magical unicorn to deliver your burger....`);
+    }
+
     addIngredientHandelr = (type) => {
         const newCount = this.state.ingredients[type] + 1
         const newIngredients = {...this.state.ingredients}
@@ -65,7 +69,11 @@ class BurgerBuilder extends Component {
         return (
             <Aux>
                 <Modal show={this.state.isOrdering} close={this.abortOrderHandler}>
-                    <OrderSummary ingredients={this.state.ingredients} price={this.state.burgerPrice}/>
+                    <OrderSummary 
+                        ingredients={this.state.ingredients} 
+                        price={this.state.burgerPrice} 
+                        cancelClicked={this.abortOrderHandler}
+                        continueClicked={this.processOrderHandler}/>
                 </Modal>
                 <Burger ingredients={this.state.ingredients}/>
                 <BuildControls
