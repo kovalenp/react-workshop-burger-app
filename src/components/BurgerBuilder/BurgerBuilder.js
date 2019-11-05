@@ -3,6 +3,8 @@ import Aux from '../hoc/Auxiliry';
 import Burger from '../Burger/Burger';
 import BuildControls from '../Burger/BuildControls/BuildControls';
 import ingredientPrices from './IngredientPrices';
+import Modal from '../UI/Modal/Modal';
+import OrderSummary from '../Burger/OrderSummary/OrderSummary';
 
 class BurgerBuilder extends Component {
     
@@ -17,6 +19,7 @@ class BurgerBuilder extends Component {
              },
              burgerPrice: 4, // Default burger price
              isOrderEnabled: false,
+             isOrdering: false,
          }
      }
     
@@ -24,6 +27,14 @@ class BurgerBuilder extends Component {
         console.log(Object.values(ingredients));
         const areIngredients = Object.values(ingredients).reduce((a, b) => a+b, 0)
         this.setState({isOrderEnabled: areIngredients > 0})
+    }
+
+    orderSummaryDispalyHandler = () => {
+        this.setState({isOrdering: true});
+    }
+
+    abortOrderHandler = () => {
+        this.setState({isOrdering: false});
     }
 
     addIngredientHandelr = (type) => {
@@ -53,13 +64,17 @@ class BurgerBuilder extends Component {
         
         return (
             <Aux>
+                <Modal show={this.state.isOrdering} close={this.abortOrderHandler}>
+                    <OrderSummary ingredients={this.state.ingredients} price={this.state.burgerPrice}/>
+                </Modal>
                 <Burger ingredients={this.state.ingredients}/>
                 <BuildControls
                     burgerPrice={this.state.burgerPrice}
                     more={this.addIngredientHandelr}
                     less={this.removeIngredientHandelr}
                     dissable={dissabledInfo}
-                    canOrder={this.state.isOrderEnabled}/>
+                    canOrder={this.state.isOrderEnabled}
+                    isOrdering={this.orderSummaryDispalyHandler}/>
             </Aux>
         );
     }
