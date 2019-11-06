@@ -3,9 +3,12 @@ import styles from './Modal.css';
 import Aux from '../../hoc/Auxiliry';
 import Backdrop from '../Backdrop/Backdrop';
 
+const showProprsAreEqual = (prevProp, nextProp) => prevProp.show === nextProp.show
+
 const Modal = (props) => (
         <Aux>
         <Backdrop show={props.show} close={props.close}/>
+        {console.log('[Modal update]')}
         <div 
             className={styles.Modal}
             style = {{
@@ -18,4 +21,4 @@ const Modal = (props) => (
         </Aux>
     );
 
-export default Modal;
+export default React.memo(Modal, showProprsAreEqual);
