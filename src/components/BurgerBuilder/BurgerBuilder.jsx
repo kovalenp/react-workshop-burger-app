@@ -5,6 +5,7 @@ import BuildControls from '../Burger/BuildControls/BuildControls';
 import ingredientPrices from './IngredientPrices';
 import Modal from '../UI/Modal/Modal';
 import OrderSummary from '../Burger/OrderSummary/OrderSummary';
+import httpClient from '../../axiosOrders';
 
 class BurgerBuilder extends Component {
     
@@ -37,8 +38,12 @@ class BurgerBuilder extends Component {
         this.setState({isOrdering: false});
     }
 
-    processOrderHandler = () => {
-        alert(`I'm calling a magical unicorn to deliver your burger....`);
+    processOrderHandler = async () => {
+        //alert(`I'm calling a magical unicorn to deliver your burger....`);
+        httpClient.post('/orders.json', {ingredients: this.state.ingredients, price: this.state.burgerPrice, name: 'Pavel'})
+        .then(response => console.log(response))
+        .catch(error => console.error(error));
+        
     }
 
     addIngredientHandelr = (type) => {
