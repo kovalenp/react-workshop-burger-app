@@ -3,7 +3,7 @@ import styles from './Modal.css';
 import Aux from '../../hoc/Auxiliry';
 import Backdrop from '../Backdrop/Backdrop';
 
-const showProprsAreEqual = (prevProp, nextProp) => prevProp.show === nextProp.show
+const showProprsAreEqual = (prevProp, nextProp) => prevProp.show === nextProp.show;
 
 const Modal = (props) => (
         <Aux>

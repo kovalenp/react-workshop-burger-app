@@ -5,6 +5,7 @@ import BuildControls from '../Burger/BuildControls/BuildControls';
 import ingredientPrices from './IngredientPrices';
 import Modal from '../UI/Modal/Modal';
 import OrderSummary from '../Burger/OrderSummary/OrderSummary';
+import Spinner from '../UI/Spinner/Spinner';
 import httpClient from '../../axiosOrders';
 
 class BurgerBuilder extends Component {
@@ -21,6 +22,7 @@ class BurgerBuilder extends Component {
              burgerPrice: 4, // Default burger price
              isOrderEnabled: false,
              isOrdering: false,
+             displaySpinner: false,
          }
      }
     
@@ -39,11 +41,12 @@ class BurgerBuilder extends Component {
     }
 
     processOrderHandler = async () => {
-        //alert(`I'm calling a magical unicorn to deliver your burger....`);
-        httpClient.post('/orders.json', {ingredients: this.state.ingredients, price: this.state.burgerPrice, name: 'Pavel'})
-        .then(response => console.log(response))
-        .catch(error => console.error(error));
-        
+        this.setState({displaySpinner: true});
+        const response = await httpClient.post('/orders.json', {ingredients: this.state.ingredients, price: this.state.burgerPrice, name: 'Pavel'});
+        // dummy timeout
+        setTimeout(function(){}, 2000);
+        this.setState({displaySpinner: false});
+        console.log(response);
     }
 
     addIngredientHandelr = (type) => {
@@ -67,6 +70,19 @@ class BurgerBuilder extends Component {
     render () {
         
         const dissabledInfo ={...this.state.ingredients};
+        
+        let modalContent;
+
+        if (this.state.displaySpinner) {
+            modalContent = (<Spinner />)
+        } else {
+            modalContent = (<OrderSummary 
+                ingredients={this.state.ingredients} 
+                price={this.state.burgerPrice} 
+                cancelClicked={this.abortOrderHandler}
+                continueClicked={this.processOrderHandler}/>)
+        }
+        
         for (let key in dissabledInfo) {
             dissabledInfo[key] = dissabledInfo[key] <= 0;
         }
@@ -74,11 +90,7 @@ class BurgerBuilder extends Component {
         return (
             <Aux>
                 <Modal show={this.state.isOrdering} close={this.abortOrderHandler}>
-                    <OrderSummary 
-                        ingredients={this.state.ingredients} 
-                        price={this.state.burgerPrice} 
-                        cancelClicked={this.abortOrderHandler}
-                        continueClicked={this.processOrderHandler}/>
+                    {modalContent}
                 </Modal>
                 <Burger ingredients={this.state.ingredients}/>
                 <BuildControls
