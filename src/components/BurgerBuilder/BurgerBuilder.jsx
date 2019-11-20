@@ -41,7 +41,7 @@ class BurgerBuilder extends Component {
     }
 
     processOrderHandler = async () => {
-        this.setState({displaySpinner: true});
+        this.setState({displaySpinner: true, isOrdering: false});
         const response = await httpClient.post('/orders.json', {ingredients: this.state.ingredients, price: this.state.burgerPrice, name: 'Pavel'});
         this.setState({displaySpinner: false, isOrdering: false});
         console.log(response);
@@ -69,11 +69,13 @@ class BurgerBuilder extends Component {
         
         const dissabledInfo ={...this.state.ingredients};
         
-        let modalContent;
+        let modalContent = null;
 
         if (this.state.displaySpinner) {
             modalContent = (<Spinner />)
-        } else {
+        } 
+        
+        if (this.state.isOrdering) {
             modalContent = (<OrderSummary 
                 ingredients={this.state.ingredients} 
                 price={this.state.burgerPrice} 
