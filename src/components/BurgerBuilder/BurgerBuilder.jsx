@@ -43,9 +43,7 @@ class BurgerBuilder extends Component {
     processOrderHandler = async () => {
         this.setState({displaySpinner: true});
         const response = await httpClient.post('/orders.json', {ingredients: this.state.ingredients, price: this.state.burgerPrice, name: 'Pavel'});
-        // dummy timeout
-        setTimeout(function(){}, 2000);
-        this.setState({displaySpinner: false});
+        this.setState({displaySpinner: false, isOrdering: false});
         console.log(response);
     }
 
@@ -89,7 +87,7 @@ class BurgerBuilder extends Component {
         
         return (
             <Aux>
-                <Modal show={this.state.isOrdering} close={this.abortOrderHandler}>
+                <Modal show={this.state.isOrdering} spinner={this.state.displaySpinner} close={this.abortOrderHandler}>
                     {modalContent}
                 </Modal>
                 <Burger ingredients={this.state.ingredients}/>
