@@ -6,7 +6,7 @@ import NavigationItems from '../NavigationItems/NavigationItems';
 const Toolbar = () => (
         <header className={styles.Toolbar}>
             <Logo />
-            <NavigationItems />>
+            <NavigationItems />
         </header>    
     );
 
