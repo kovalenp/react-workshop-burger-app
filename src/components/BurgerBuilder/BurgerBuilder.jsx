@@ -45,14 +45,11 @@ class BurgerBuilder extends Component {
         for (let i in this.state.ingredients) {
             queryParams.push(`${encodeURIComponent(i)}=${encodeURIComponent(this.state.ingredients[i])}`);
         }
+        queryParams.push(`price=${this.state.bur}`)
         this.props.history.push({
             pathname: '/checkout',
             search: `?${queryParams.join('&')}`
         });
-        // this.setState({displaySpinner: true, isOrdering: false});
-        // const response = await httpClient.post('/orders.json', {ingredients: this.state.ingredients, price: this.state.burgerPrice, name: 'Pavel'});
-        // this.setState({displaySpinner: false, isOrdering: false});
-        // console.log(response);
     }
 
     addIngredientHandelr = (type) => {
