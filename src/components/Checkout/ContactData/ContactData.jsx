@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Button from '../../UI/Button/Button'
-//import Spinner from '../../UI/Spinner/Spinner';
+import Aux from '../../hoc/Auxiliry';
+import Spinner from '../../UI/Spinner/Spinner';
 import httpClient from '../../../axiosOrders';
 
 import styles from './ContactData.css';
@@ -36,7 +37,8 @@ class ContactData extends Component {
     }
 
     render() {
-        return (
+            let content = null;
+            let contactForm = (
             <div className={styles.ContactData}>
                 <h4>Enter your Contact Data</h4>
                 <form>
@@ -52,6 +54,14 @@ class ContactData extends Component {
                     </Button> 
                 </form>
             </div>
+        )
+        
+        this.state.displaySpinner ? content = (<Spinner />) : content = contactForm;
+
+        return (
+            <Aux>
+                {content}
+            </Aux>
         );
     }
 }

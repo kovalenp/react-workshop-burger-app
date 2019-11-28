@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import Aux from '../hoc/Auxiliry';
-import Burger from '../Burger/Burger';
-import BuildControls from '../Burger/BuildControls/BuildControls';
+import Burger from './Burger/Burger';
+import BuildControls from './Burger/BuildControls/BuildControls';
 import ingredientPrices from './IngredientPrices';
 import Modal from '../UI/Modal/Modal';
-import OrderSummary from '../Burger/OrderSummary/OrderSummary';
+import OrderSummary from './Burger/BurgerSummary/BurgerSummary';
 import Spinner from '../UI/Spinner/Spinner';
 // import httpClient from '../../axiosOrders';
 
