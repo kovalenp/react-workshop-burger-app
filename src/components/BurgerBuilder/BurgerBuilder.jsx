@@ -6,7 +6,7 @@ import ingredientPrices from './IngredientPrices';
 import Modal from '../UI/Modal/Modal';
 import OrderSummary from '../Burger/OrderSummary/OrderSummary';
 import Spinner from '../UI/Spinner/Spinner';
-import httpClient from '../../axiosOrders';
+// import httpClient from '../../axiosOrders';
 
 class BurgerBuilder extends Component {
     
@@ -41,10 +41,18 @@ class BurgerBuilder extends Component {
     }
 
     processOrderHandler = async () => {
-        this.setState({displaySpinner: true, isOrdering: false});
-        const response = await httpClient.post('/orders.json', {ingredients: this.state.ingredients, price: this.state.burgerPrice, name: 'Pavel'});
-        this.setState({displaySpinner: false, isOrdering: false});
-        console.log(response);
+        const queryParams = [];
+        for (let i in this.state.ingredients) {
+            queryParams.push(`${encodeURIComponent(i)}=${encodeURIComponent(this.state.ingredients[i])}`);
+        }
+        this.props.history.push({
+            pathname: '/checkout',
+            search: `?${queryParams.join('&')}`
+        });
+        // this.setState({displaySpinner: true, isOrdering: false});
+        // const response = await httpClient.post('/orders.json', {ingredients: this.state.ingredients, price: this.state.burgerPrice, name: 'Pavel'});
+        // this.setState({displaySpinner: false, isOrdering: false});
+        // console.log(response);
     }
 
     addIngredientHandelr = (type) => {
