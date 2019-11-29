@@ -34,6 +34,7 @@ class ContactData extends Component {
             }});
         this.setState({displaySpinner: false});
         console.log(response);
+        this.props.history.push('/')
     }
 
     render() {
