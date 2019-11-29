@@ -27,7 +27,6 @@ class BurgerBuilder extends Component {
      }
     
     isOrderButtonDisabled = (ingredients) => {
-        console.log(Object.values(ingredients));
         const areIngredients = Object.values(ingredients).reduce((a, b) => a+b, 0)
         this.setState({isOrderEnabled: areIngredients > 0})
     }

@@ -1,10 +1,11 @@
 import React from 'react';
 import styles from './Order.css';
 
+//TODO: parse ingredients nicely
 const Order = (props) => (
-    <div className={styles.Order}>
-        <p>Ingredirents: Salad (1)</p>
-        <p>Price: <strong>USD 5.45</strong></p>
+    <div key={props.key} className={styles.Order}>
+        <p>{JSON.stringify(props.ingredients)}</p>
+        <p>Price: <strong>USD {props.price.toFixed(2)}</strong></p>
     </div>        
 );
 

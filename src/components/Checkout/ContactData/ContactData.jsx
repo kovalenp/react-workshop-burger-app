@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Button from '../../UI/Button/Button'
 import Aux from '../../hoc/Auxiliry';
 import Spinner from '../../UI/Spinner/Spinner';
-import httpClient from '../../../axiosOrders';
+import { postOrder } from '../../../axiosOrders';
 
 import styles from './ContactData.css';
 
@@ -22,16 +22,17 @@ class ContactData extends Component {
     orderHandler = async (e) => {
         e.preventDefault();
         this.setState({displaySpinner: true});
-        const response = await httpClient.post(
-            '/orders.json', 
+        //TODO: add error handling
+        const response = await postOrder(
             {
-                ingredients: this.props.ingredients,
-                price: this.props.totalPrice,
-                conactDetails: {
-                    name: this.state.name,
-                    email: this.state.email,
-                    address: this.state.address,
-            }});
+                        ingredients: this.props.ingredients,
+                        price: this.props.totalPrice,
+                        conactDetails: {
+                            name: this.state.name,
+                            email: this.state.email,
+                            address: this.state.address,
+                    }}
+        );
         this.setState({displaySpinner: false});
         console.log(response);
         this.props.history.push('/')
