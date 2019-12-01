@@ -2,20 +2,18 @@ import React, { Component } from 'react';
 import Button from '../../UI/Button/Button'
 import Aux from '../../hoc/Auxiliry';
 import Spinner from '../../UI/Spinner/Spinner';
+import Input from '../../UI/Input/Input';
 import { postOrder } from '../../../axiosOrders';
+
+import OrderFormSchema from './OrderFormSchema';
+
 
 import styles from './ContactData.css';
 
 class ContactData extends Component {
     
     state = {
-        name: 'Pavel',
-        email: 'pavel@email.com',
-        address: {
-            phone: '777444555',
-            postalCode: '29012',
-            street: 'Malaga Street',
-        },
+        orderForm: OrderFormSchema,
         displaySpinner: false,
     }
     
@@ -39,27 +37,40 @@ class ContactData extends Component {
     }
 
     render() {
-            let content = null;
-            let contactForm = (
-            <div className={styles.ContactData}>
-                <h4>Enter your Contact Data</h4>
-                <form>
-                    <input type='text' className={styles.Input} name='name' placeholder='Your Name' />
-                    <input type='email'className={styles.Input} name='email' placeholder='Your Email' />
-                    <input type='text' className={styles.Input} name='phone' placeholder='Your Phone' />
-                    <input type='text' className={styles.Input} name='street' placeholder='Your Street' />
-                    <input type='text' className={styles.Input} name='postalCode' placeholder='Your PostalCode' />
-                    <Button 
-                        btnType='Success'
-                        clicked={this.orderHandler}
-                        >ORDER
-                    </Button> 
-                </form>
-            </div>
-        )
+            
+        const formElementsArray = [];
+        for (let key in this.state.orderForm){
+            formElementsArray.push(
+                {
+                    id: key,
+                    config: this.state.orderForm[key],
+                }
+            )
+        }
         
-        this.state.displaySpinner ? content = (<Spinner />) : content = contactForm;
-
+        let content = null;
+        let contactForm = (
+        <div className={styles.ContactData}>
+            <h4>Enter your Contact Data</h4>
+            <form>
+                {formElementsArray.map(element => (
+                    <Input
+                        key={element.id}
+                        elementType={element.config.elementType}
+                        elementConfig={element.config.elementConfig}
+                        value={element.config.value}
+                    />
+                ))}
+                <Button 
+                    btnType='Success'
+                    clicked={this.orderHandler}
+                    >ORDER
+                </Button> 
+            </form>
+        </div>
+        )
+     
+    this.state.displaySpinner ? content = (<Spinner />) : content = contactForm;
         return (
             <Aux>
                 {content}
