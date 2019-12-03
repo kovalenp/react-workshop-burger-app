@@ -17,19 +17,29 @@ class ContactData extends Component {
         displaySpinner: false,
     }
     
+    inputChangeHandler = (event, inputId) => {
+        let updatedForm = {...this.state.orderForm};
+        const updatedElement = {...updatedForm[inputId]};
+        updatedElement.value = event.target.value;
+        updatedForm[inputId] = updatedElement;
+        this.setState({orderForm: updatedForm});
+
+    }
+
     orderHandler = async (e) => {
         e.preventDefault();
         this.setState({displaySpinner: true});
+        const formData = {};
+        for (let el in this.state.orderForm) {
+            formData[el] = this.state.orderForm[el].value
+        }
         //TODO: add error handling
         const response = await postOrder(
             {
-                        ingredients: this.props.ingredients,
-                        price: this.props.totalPrice,
-                        conactDetails: {
-                            name: this.state.name,
-                            email: this.state.email,
-                            address: this.state.address,
-                    }}
+                ingredients: this.props.ingredients,
+                price: this.props.totalPrice,
+                conactDetails: formData
+            }
         );
         this.setState({displaySpinner: false});
         console.log(response);
@@ -52,20 +62,17 @@ class ContactData extends Component {
         let contactForm = (
         <div className={styles.ContactData}>
             <h4>Enter your Contact Data</h4>
-            <form>
+            <form onSubmit={this.orderHandler}>
                 {formElementsArray.map(element => (
                     <Input
                         key={element.id}
                         elementType={element.config.elementType}
                         elementConfig={element.config.elementConfig}
                         value={element.config.value}
+                        changed={e => this.inputChangeHandler(e, element.id)}
                     />
                 ))}
-                <Button 
-                    btnType='Success'
-                    clicked={this.orderHandler}
-                    >ORDER
-                </Button> 
+                <Button btnType='Success'>ORDER</Button> 
             </form>
         </div>
         )
