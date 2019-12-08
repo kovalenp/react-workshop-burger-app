@@ -1,112 +1,99 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Aux from '../hoc/Auxiliry';
 import Burger from './Burger/Burger';
 import BuildControls from './Burger/BuildControls/BuildControls';
-import ingredientPrices from './IngredientPrices';
 import Modal from '../UI/Modal/Modal';
 import OrderSummary from './Burger/BurgerSummary/BurgerSummary';
 import Spinner from '../UI/Spinner/Spinner';
-// import httpClient from '../../axiosOrders';
+import * as actions from '../../reducer/actions';
+import { connect } from 'react-redux';
 
 class BurgerBuilder extends Component {
-    
-     constructor(props) {
-         super(props);
-         this.state = {
-            ingredients: {
-                 salad: 0,
-                 bacon: 0,
-                 cheese: 0,
-                 meat: 0,
-             },
-             burgerPrice: 4, // Default burger price
-             isOrderEnabled: false,
-             isOrdering: false,
-             displaySpinner: false,
-         }
-     }
-    
-    isOrderButtonDisabled = (ingredients) => {
-        const areIngredients = Object.values(ingredients).reduce((a, b) => a+b, 0)
-        this.setState({isOrderEnabled: areIngredients > 0})
+
+    state = {
+        isOrdering: false,
+        displaySpinner: false,
+    }
+
+    isOrderButtonEnabled = () => {
+        const areIngredients = Object.values(this.props.ingredients).reduce((a, b) => a + b, 0)
+        return areIngredients > 0
     }
 
     orderSummaryDispalyHandler = () => {
-        this.setState({isOrdering: true});
+        this.setState({ isOrdering: true });
     }
 
     abortOrderHandler = () => {
-        this.setState({isOrdering: false});
+        this.setState({ isOrdering: false });
     }
 
     processOrderHandler = async () => {
         const queryParams = [];
-        for (let i in this.state.ingredients) {
-            queryParams.push(`${encodeURIComponent(i)}=${encodeURIComponent(this.state.ingredients[i])}`);
+        for (let i in this.props.ingredients) {
+            queryParams.push(`${encodeURIComponent(i)}=${encodeURIComponent(this.props.ingredients[i])}`);
         }
-        queryParams.push(`price=${this.state.burgerPrice}`)
+        queryParams.push(`price=${this.props.burgerPrice}`)
         this.props.history.push({
             pathname: '/checkout',
             search: `?${queryParams.join('&')}`
         });
     }
 
-    addIngredientHandelr = (type) => {
-        const newCount = this.state.ingredients[type] + 1
-        const newIngredients = {...this.state.ingredients}
-        newIngredients[type] = newCount;
-        const newPrice = this.state.burgerPrice + ingredientPrices[type];
-        this.setState({ingredients: newIngredients, burgerPrice: newPrice});
-        this.isOrderButtonDisabled(newIngredients);
-    }
+    render() {
 
-    removeIngredientHandelr = (type) => {
-        const newCount = (this.state.ingredients[type] > 0) ? this.state.ingredients[type]- 1 : 0;
-        const newIngredients = {...this.state.ingredients}
-        newIngredients[type] = newCount;
-        const newPrice = this.state.burgerPrice - ingredientPrices[type];
-        this.setState({ingredients: newIngredients, burgerPrice: newPrice});
-        this.isOrderButtonDisabled(newIngredients);
-    }
+        const dissabledInfo = { ...this.props.ingredients };
 
-    render () {
-        
-        const dissabledInfo ={...this.state.ingredients};
-        
         let modalContent = null;
 
         if (this.state.displaySpinner) {
             modalContent = (<Spinner />)
-        } 
-        
-        if (this.state.isOrdering) {
-            modalContent = (<OrderSummary 
-                ingredients={this.state.ingredients} 
-                price={this.state.burgerPrice} 
-                cancelClicked={this.abortOrderHandler}
-                continueClicked={this.processOrderHandler}/>)
         }
-        
+
+        if (this.state.isOrdering) {
+            modalContent = (<OrderSummary
+                ingredients={this.props.ingredients}
+                price={this.props.burgerPrice}
+                cancelClicked={this.abortOrderHandler}
+                continueClicked={this.processOrderHandler} />)
+        }
+
         for (let key in dissabledInfo) {
             dissabledInfo[key] = dissabledInfo[key] <= 0;
         }
-        
+
         return (
             <Aux>
                 <Modal show={this.state.isOrdering} spinner={this.state.displaySpinner} close={this.abortOrderHandler}>
                     {modalContent}
                 </Modal>
-                <Burger ingredients={this.state.ingredients}/>
+                <Burger ingredients={this.props.ingredients} />
                 <BuildControls
-                    burgerPrice={this.state.burgerPrice}
-                    more={this.addIngredientHandelr}
-                    less={this.removeIngredientHandelr}
+                    burgerPrice={this.props.burgerPrice}
+                    more={this.props.addIngredient}
+                    less={this.props.removeIngredient}
                     dissable={dissabledInfo}
-                    canOrder={this.state.isOrderEnabled}
-                    isOrdering={this.orderSummaryDispalyHandler}/>
+                    canOrder={this.isOrderButtonEnabled()}
+                    isOrdering={this.orderSummaryDispalyHandler} />
             </Aux>
         );
     }
 };
 
-export default BurgerBuilder;
+const mapStateToProps = state => {
+    return {
+        ingredients: state.ingredients,
+        burgerPrice: state.burgerPrice
+    };
+};
+
+
+const mapDispatchToProps = dispatch => {
+    return {
+        addIngredient: ingredient => dispatch({ type: actions.ADD_INGREDIENT, ingredient }),
+        removeIngredient: ingredient => dispatch({ type: actions.REMOVE_INGREDIENT, ingredient }),
+
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(BurgerBuilder);
