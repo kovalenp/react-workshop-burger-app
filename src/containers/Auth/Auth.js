@@ -117,7 +117,6 @@ class Auth extends Component {
 
 
   render() {
-
     let authButton;
 
     let formElementsArray = [];

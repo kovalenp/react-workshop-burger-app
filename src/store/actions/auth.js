@@ -34,10 +34,10 @@ export const auth = (email, password, authType) => {
     console.log('Here' + authType)
     switch (authType) {
       case "SIGN UP":
-        authUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBSz8zwnQq4XR5L9SP3je3Q8t-h_5GDN70'
+        authUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_FIREBASE_API_KEY}`
         break
       case "SIGN IN":
-        authUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBSz8zwnQq4XR5L9SP3je3Q8t-h_5GDN70'
+        authUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_FIREBASE_API_KEY}`
         break
       default:
         authUrl = 'n/a'
