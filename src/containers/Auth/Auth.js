@@ -117,6 +117,11 @@ class Auth extends Component {
 
 
   render() {
+
+    if (this.props.isAuth) {
+      this.props.history.push("/");
+    }
+
     let authButton;
 
     let formElementsArray = [];
@@ -176,6 +181,7 @@ const mapStateToProps = state => {
   return {
     loading: state.auth.loading,
     error: state.auth.error,
+    isAuth: state.auth.token != null,
   }
 };
 
